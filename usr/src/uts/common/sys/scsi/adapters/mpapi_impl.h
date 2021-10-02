@@ -20,6 +20,7 @@
  */
 /*
  * Copyright (c) 2006, 2010, Oracle and/or its affiliates. All rights reserved.
+ * Copyright 2021 RackTop Systems, Inc.
  */
 
 #ifndef _SYS_SCSI_ADAPTERS_MPAPI_IMPL_H
@@ -28,6 +29,7 @@
 #include <sys/sunmdi.h>
 #include <sys/sunddi.h>
 #include <sys/mdi_impldefs.h>
+#include <sys/debug.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -69,7 +71,11 @@ typedef struct mp_driver_prop {
 	uint32_t	autoProbingEnabled;
 	uint32_t	proprietaryPropSize;
 	caddr_t		proprietaryProp;
+#ifdef _ILP32
+       uint32_t        pad;
+#endif
 } mp_driver_prop_t;
+CTASSERT(sizeof (mp_driver_prop_t) == 0x248);/s/
 
 
 /* Size of "proprietaryProp" field */
@@ -161,7 +167,11 @@ typedef struct mp_logical_unit_prop {
 	boolean_t			overridePathInUse;
 	uint32_t			proprietaryPropSize;
 	caddr_t				proprietaryProp;
+#ifdef _ILP32
+       uint32_t                        pad;
+#endif
 } mp_logical_unit_prop_t;
+CTASSERT(sizeof (mp_logical_unit_prop_t) == 0x268);
 
 
 /* Constants for nameType */
@@ -262,7 +272,11 @@ typedef struct mp_proprietary_loadbalance_prop {
 	uint32_t	typeIndex;
 	uint32_t	proprietaryPropSize;
 	caddr_t		proprietaryProp;
+#ifdef _ILP32
+	uint32_t        pad;
+#endif
 } mp_proprietary_loadbalance_prop_t;
+CTASSERT(sizeof (mp_proprietary_loadbalance_prop_t) == 0x218);
 
 
 /*
@@ -283,7 +297,7 @@ typedef struct mp_uscsi_cmd {
 	struct buf		*rqbp;		/* auto-rqsense packet */
 	mdi_pathinfo_t		*pip;		/* path information */
 	int			arq_enabled;	/* auto-rqsense enable flag */
-}mp_uscsi_cmd_t;
+} mp_uscsi_cmd_t;
 
 /*
  * Structure used as input to
